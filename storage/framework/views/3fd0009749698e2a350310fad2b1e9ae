@@ -1,0 +1,201 @@
+<?php $__env->startSection('breadcrumbs'); ?>
+<!--breadcrumbs-->
+<div class="container">
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="breadcrumbs">
+				<ol class="breadcrumb">
+				  <li><a href="#">Home</a></li>
+				  <li><a href="#">Cart</a></li>
+				</ol>
+			</div>
+		</div>
+	</div>
+</div>
+<!--/breadcrumbs-->
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('contents'); ?>
+<section id="cart_items">
+		<div class="container">
+			<div class="table-responsive cart_info">
+				<table class="table table-condensed">
+					<thead>
+						<tr class="cart_menu">
+							<td class="image">Item</td>
+							<td class="description"></td>
+							<td class="price">Price</td>
+							<td class="quantity">Quantity</td>
+							<td class="total">Total</td>
+							<td></td>
+						</tr>
+					</thead>
+					<?php if(isset($products) && count($products)> 0): ?>
+					<tbody>
+						<?php $ttl = 0;?>
+						<?php foreach($products as $product): ?>
+						<tr>
+							<td>
+								<a href="<?php echo e(url('product',$product['slug'])); ?>"><img class="img-responsive" src="<?php echo e($product['imgsrc']); ?>" alt=""></a>
+							</td>
+							<td class="cart_description">
+								<h4><a href="<?php echo e(url('product',$product['slug'])); ?>"><?php echo e($product['title']); ?></a></h4>
+								<p>PID: <?php echo e($product['id']); ?></p>
+							</td>
+							<td>
+								<p><?php echo e($product['price']); ?></p>
+							</td>
+							<td class="cart_quantity">
+								<div class="cart_quantity_button" >
+									<?php echo Form::open(['url'=>'cart','method'=>'post','style'=>'display:inline']); ?>
+
+									<button type="submit" class="btn btn-fefault cart cart_quantity_down" style="margin:0"><i class="fa fa-plus"></i></button> 
+									<?php echo Form::hidden('action','add'); ?>
+
+									<?php echo Form::hidden('slug',$product['slug']); ?>
+
+									<?php echo Form::close(); ?>
+
+									<?php echo Form::open(['url'=>'cart','method'=>'post','style'=>'display:inline']); ?>
+
+									<input class="cart_quantity_input" disabled="true" type="text" style="margin:0" name="quantity" value="<?php echo e($product['qty']); ?>" autocomplete="off" size="2">
+									<button type="submit" class="btn btn-fefault cart cart_quantity_up" style="margin:0"><i class="fa fa-minus"></i></button> 
+									<?php echo Form::hidden('action','remove'); ?>
+
+									<?php echo Form::hidden('slug',$product['slug']); ?>
+
+									<?php echo Form::close(); ?>
+
+								</div>
+							</td>
+							<td>
+								<p class="cart_total_price" style="font-size:20px" ><?php echo e($product['qty']*$product['price']); ?></p>
+							</td>
+							<td>
+
+									<?php echo Form::open(['url'=>'cart','method'=>'post','style'=>'display:inline']); ?>
+
+									<button type="submit" class="btn btn-fefault cart cart_quantity_delete"><i class="fa fa-times"></i></button> 
+									<?php echo Form::hidden('action','delete'); ?>
+
+									<?php echo Form::hidden('slug',$product['slug']); ?>
+
+									<?php echo Form::close(); ?>
+
+									</td>
+						</tr>
+						<?php $ttl += $product['qty']*$product['price']; ?>
+						<?php endforeach; ?>
+					</tbody>
+					<?php else: ?>
+					<tbody>
+						<tr><td class="cart_description" rowspan="2"><p>Your shopping cart is currently empty! Please come back later.</p></td></tr>
+					</tbody>
+					<?php endif; ?>
+				</table>
+			</div>
+		</div>
+	</section> <!--/#cart_items-->
+
+	<?php if(isset($products) && count($products)> 0): ?>
+	<section id="do_action">
+		<div class="container">
+			<div class="heading">
+				<h3>What would you like to do next?</h3>
+				<p>Choose if you have a discount code or reward points you want to use or would like to estimate your delivery cost.</p>
+			</div>
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="total_area">
+						<ul>
+							<li>Cart Sub Total <span>$<?php echo e($ttl); ?></span></li>
+							<li>Shipping Cost <span>Free</span></li>
+							<li>Total <span>$<?php echo e($ttl); ?></span></li>
+						</ul>
+							<?php if(! Session::has('user')): ?>
+							<a class="btn btn-default check_out" href="<?php echo e(url('account','login')); ?>">Check Out</a>
+							<?php endif; ?>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<?php if(Session::has('user')): ?>	
+		<div class="container">
+		<?php if(isset($ferrors)): ?>
+		<div class="row">
+		<div class="col-sm-12">
+		    <div class="alert alert-danger">
+		        <ul>
+		            <?php foreach($ferrors->all() as $error): ?>
+		                <li><?php echo e($error); ?></li>
+		            <?php endforeach; ?>
+		        </ul>
+		    </div>
+		</div>
+		</div>
+		<?php endif; ?>
+			<div class="col-sm-12">
+					<div class="jumbotron">
+					<h2 class="heading">Payment Information
+					<p>logged in as <b><?php echo e(Session::get('user')['username']); ?></b></p></h2>
+					<hr style="both:clear;width: 100%; color: black; height: 1px; background-color:black;" />
+					<div class="shopper-info">
+					<?php if(isset($input)): ?>
+					<?php echo Form::open(['url'=>'cart/checkout','method'=>'post']); ?>
+
+								Shipping Order
+								<?php echo Form::text('receiver_name',$input['receiver_name'], ['placeholder'=>'Receiver Name']); ?>
+
+								<?php echo Form::text('address_1',$input['address_1'], ['placeholder'=>'Address 1']); ?>
+
+								<?php echo Form::text('address_2',$input['address_2'], ['placeholder'=>'Address 2']); ?>
+
+								<?php echo Form::text('phone',$input['phone'], ['placeholder'=>'Phone']); ?>
+
+								</br>Online Payment Information
+								<?php echo Form::text('credit_card_number',$input['credit_card_number'], ['placeholder'=>'16 Digits Credit Card Number']); ?>
+
+								<?php echo Form::text('csv',$input['csv'], ['placeholder'=>'CSV']); ?>
+
+								</br>Prefered Delivery Day
+								<?php echo Form::input('date', 'delivery_date', $input['delivery_date'], ['class' => 'form-control', 'placeholder' => 'Date']); ?>
+
+								<?php echo Form::submit('Continue', ['type'=>'submit','class'=>'btn btn-primary']); ?>
+
+					<?php echo Form::close(); ?>
+
+					<?php else: ?>
+					<?php echo Form::open(['url'=>'cart/checkout','method'=>'post']); ?>
+
+								Shipping Order
+								<?php echo Form::text('receiver_name',null, ['placeholder'=>'Receiver Name']); ?>
+
+								<?php echo Form::text('address_1',null, ['placeholder'=>'Address 1']); ?>
+
+								<?php echo Form::text('address_2',null, ['placeholder'=>'Address 2']); ?>
+
+								<?php echo Form::text('phone',null, ['placeholder'=>'Phone']); ?>
+
+								</br>Online Payment Information
+								<?php echo Form::text('credit_card_number',null, ['placeholder'=>'16 Digits Credit Card Number']); ?>
+
+								<?php echo Form::text('csv',null, ['placeholder'=>'CSV']); ?>
+
+								</br>Prefered Delivery Day
+								<?php echo Form::input('date', 'delivery_date', date('Y-m-d',strtotime('+1 Days')), ['class' => 'form-control', 'placeholder' => 'Date']); ?>
+
+								<?php echo Form::submit('Continue', ['type'=>'submit','class'=>'btn btn-primary']); ?>
+
+					<?php echo Form::close(); ?>
+
+					<?php endif; ?>
+					</div>
+				</div>
+			</div>
+		</div>
+		<?php endif; ?>
+	</section><!--/#do_action-->
+	<?php endif; ?>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('block.master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

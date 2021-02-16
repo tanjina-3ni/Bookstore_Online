@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Frank Lee | Online Bookstore</title>
+    <link href="<?php echo e(asset('/css/bootstrap.min.css')); ?>" rel="stylesheet">
+    <link href="<?php echo e(asset('/css/font-awesome.min.css')); ?>" rel="stylesheet">
+    <link href="<?php echo e(asset('/css/prettyPhoto.css')); ?>" rel="stylesheet">
+    <link href="<?php echo e(asset('/css/price-range.css')); ?>" rel="stylesheet">
+    <link href="<?php echo e(asset('/css/animate.css')); ?>" rel="stylesheet">
+	<link href="<?php echo e(asset('/css/main.css')); ?>" rel="stylesheet">
+	<link href="<?php echo e(asset('/css/responsive.css')); ?>" rel="stylesheet">
+    <!--[if lt IE 9]>
+    <script src="<?php echo e(url ('js/html5shiv.js')); ?>"></script>
+    <script src="<?php echo e(url ('js/respond.min.js')); ?>"></script>
+    <![endif]-->       
+    <link rel="shortcut icon" href="<?php echo e(asset('/images/ico/favicon.ico')); ?>">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="<?php echo e(asset('/images/ico/apple-touch-icon-144-precomposed.png')); ?>">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="<?php echo e(asset('/images/ico/apple-touch-icon-114-precomposed.png')); ?>">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="<?php echo e(asset('/images/ico/apple-touch-icon-72-precomposed.png')); ?>">
+    <link rel="apple-touch-icon-precomposed" href="<?php echo e(asset('/images/ico/apple-touch-icon-57-precomposed.png')); ?>">
+</head><!--/head-->
+
+<body>
+	<!--header-->
+	<header id="header">
+	<!--header_top-->
+		<div class="header_top">
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-8">
+						<div class="contactinfo">
+							<ul class="nav nav-pills">
+                                                            <li><a href="#"><h1><i class="fa fa-book"></i> eBookstore</h1> <i class="fa fa-heart"> </i> Since 2018</a></li>
+								
+							</ul>
+						</div>
+					</div>
+					<div class="col-sm-4">
+						<div class="social-icons pull-right">
+							<ul class="nav navbar-nav">
+                                                            <li><a href="mailto:admin@examle.com"><h1><i class="fa fa-envelope"></i> </h1> </a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--/header_top-->
+		<?php if(Session::has('user')): ?>
+		<!--Head menu-->
+		<div class="header-middle">
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-4">
+						<div class="logo pull-left">
+							 <!--<a href="<?php echo e(url ('/')); ?>"><h4>Reading starts here!</h4></a>--> 
+						</div>
+					</div>
+					<div class="col-sm-8">
+						<div class="shop-menu pull-right">
+							<ul class="nav navbar-nav">
+								<li><a href="<?php echo e(url ('/account')); ?>"><i class="fa fa-user"></i>Account</a></li>	
+								<?php if(Session::get('user')['isAdmin']): ?>		
+								<li><a href="<?php echo e(url ('/checkorder')); ?>"><i class="fa fa-user"></i>Check Order</a></li>			
+								<?php endif; ?>
+								<li><a href="<?php echo e(url ('/cart')); ?>"><i class="fa fa-shopping-cart"></i>Cart(<?php echo e(count($cart)); ?>)</a></li>
+								<li><a href="<?php echo e(url ('/order')); ?>"><i class="fa fa-crosshairs"></i>Order</a></li>
+								<li><a href="<?php echo e(url ('/account/logout')); ?>"><i class="fa fa-lock"></i>Logout</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--/Head menu-->
+		<?php else: ?>
+		<!--Head menu-->
+		<div class="header-middle">
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-4">
+						<div class="logo pull-left">
+							<a href="<?php echo e(url ('/')); ?>"></a>
+						</div>
+					</div>
+					<div class="col-sm-8">
+						<div class="shop-menu pull-right">
+							<ul class="nav navbar-nav">
+								<li><a href="<?php echo e(url ('/cart')); ?>"><i class="fa fa-shopping-cart"></i>Cart(<?php echo e(count($cart)); ?>)</a></li>
+								<li><a href="<?php echo e(url ('/account/login')); ?>"><i class="fa fa-lock"></i>Login</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--/Head menu-->
+		<?php endif; ?>
+		<!--Shop menu-->
+		<div class="header-bottom">
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-9">
+						<div class="navbar-header">
+							<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+								<span class="sr-only">Toggle navigation</span>
+								<span class="icon-bar"></span>
+								<span class="icon-bar"></span>
+								<span class="icon-bar"></span>
+							</button>
+						</div>
+						<div class="mainmenu pull-left">
+							<ul class="nav navbar-nav collapse navbar-collapse">
+								<li><a href="<?php echo e(url ('/')); ?>">Home</a></li>
+								<li><a href="<?php echo e(url ('/new-arrivals')); ?>">New Arrivals</a></li>
+								<li><a href="<?php echo e(url ('/special-offers')); ?>">Special Offers</a></li>
+							</ul>
+						</div>
+					</div>
+					<div class="col-sm-3">
+						<div class="search_box pull-right">
+							<?php echo Form::open(['url'=>'/search/','method'=>'get']); ?>
+
+								<?php if(isset($searchTitle)): ?>
+								<?php echo Form::text('title',$searchTitle,['placeholder'=>'Quick Search']); ?>
+
+								<?php else: ?>
+								<?php echo Form::text('title',null,['placeholder'=>'Quick Search']); ?>
+
+								<?php endif; ?>
+							<?php echo Form::close(); ?>
+
+						</div>
+					</div>
+				</div>
+			</div>
+			<?php echo $__env->yieldContent('breadcrumbs'); ?>
+		</div>
+		<!--/Shop menu-->
+	</header>
+	<!--/header-->
+
+	
+	<?php echo $__env->yieldContent('contents'); ?>
+
+	
+	<!--/Footer-->
+	<footer>
+		<div class="footer-bottom">
+			<div class="container">
+				<div class="row">
+					<p class="pull-right">Copyright © 2018 -----. All rights reserved.</p>
+				</div>
+			</div>
+		</div>
+	</footer>
+	<!--/Footer-->
+	
+
+  	<!--bottom-->
+    <script src="<?php echo e(asset('/js/jquery.js')); ?>"></script>
+	<script src="<?php echo e(asset('/js/bootstrap.min.js')); ?>"></script>
+	<script src="<?php echo e(asset('/js/jquery.scrollUp.min.js')); ?>"></script>
+	<script src="<?php echo e(asset('/js/price-range.js')); ?>"></script>
+    <script src="<?php echo e(asset('/js/jquery.prettyPhoto.js')); ?>"></script>
+    <script src="<?php echo e(asset('/js/main.js')); ?>"></script>
+</body>
+</html>
+<!--/bottom-->

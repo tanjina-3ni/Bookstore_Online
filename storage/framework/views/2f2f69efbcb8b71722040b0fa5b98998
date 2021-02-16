@@ -1,0 +1,123 @@
+<?php $__env->startSection('breadcrumbs'); ?>
+<!--breadcrumbs-->
+<div class="container">
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="breadcrumbs">
+				<ol class="breadcrumb">
+				  <li><a href="#">Home</a></li>
+				  <li><a href="#">Account</a></li>
+				  <li><a href="#" class="active">Login</a></li>
+				</ol>
+			</div>
+		</div>
+	</div>
+</div>
+<!--/breadcrumbs-->
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('contents'); ?>
+<section id="form"><!--form-->
+	<div class="container">
+		<?php if(isset($success)): ?>
+		<div class="row">
+		<div class="col-sm-12">
+		    <div class="alert alert-success">
+		    	<?php echo e($success); ?>
+
+		    </div>
+		</div>
+		</div>
+		<?php endif; ?>
+		<?php if(isset($ferrors)): ?>
+		<div class="row">
+		<div class="col-sm-12">
+		    <div class="alert alert-danger">
+		        <ul>
+		            <?php foreach($ferrors->all() as $error): ?>
+		                <li><?php echo e($error); ?></li>
+		            <?php endforeach; ?>
+		        </ul>
+		    </div>
+		</div>
+		</div>
+		<?php endif; ?>
+		<?php if(!isset($hasLogin)): ?>
+			<div class="row">
+					<?php if(!isset($success)): ?>
+				<div class="col-sm-12">
+					<div class="jumbotron">
+					<p> Please identify your credencial before continue. </p>
+					</div>
+				</div>
+				<?php endif; ?>
+				<div class="col-sm-4 col-sm-offset-1">
+					<!--login form-->
+					<div class="login-form">
+						<h2>Login to your account</h2>
+						<?php echo Form::open(['url'=>'account/login','method'=>'post']); ?>
+
+							<?php if(isset($lusername)): ?>
+							<?php echo Form::text('username',$lusername,['placeholder'=>'Name']); ?>
+
+							<?php else: ?>
+							<?php echo Form::text('username',null,['placeholder'=>'Name']); ?>
+
+							<?php endif; ?>
+							<?php echo Form::password('password',['placeholder'=>'Your Password']); ?>
+
+							<a href="<?php echo url('account/forgot'); ?>" class>Forgot Password?</a>
+							<?php echo Form::button('Login',['type'=>'submit','class'=>'btn btn-default']); ?>
+
+						<?php echo Form::close(); ?>
+
+					</div>
+					<!--/login form-->
+				</div>
+				<div class="col-sm-1">
+					<h2 class="or">OR</h2>
+				</div>
+				<div class="col-sm-4">
+					<!--sign up form-->
+					<div class="signup-form">
+						<h2>New User Signup!</h2>
+						<?php echo Form::open(['url'=>'account/register','method'=>'post']); ?>
+
+							<?php if(isset($username)): ?>
+							<?php echo Form::text('username' ,$username, ['placeholder'=>'Name']); ?>
+
+							<?php else: ?>
+							<?php echo Form::text('username' ,null, ['placeholder'=>'Name']); ?>
+
+							<?php endif; ?>
+							<?php echo Form::password('password', ['placeholder'=>'Your Password']); ?>
+
+							<?php if(isset($secretquestion)): ?>
+							<?php echo Form::text('secretquestion',$secretquestion, ['placeholder'=>'Reset Password Secret Question']); ?>
+
+							<?php else: ?>
+							<?php echo Form::text('secretquestion',null, ['placeholder'=>'Reset Password Secret Question']); ?>
+
+							<?php endif; ?>
+							<?php if(isset($secretanswer)): ?>
+							<?php echo Form::text('secretanswer',$secretanswer,  ['placeholder'=>'Secret Answer']); ?>
+
+							<?php else: ?>
+							<?php echo Form::text('secretanswer',null,  ['placeholder'=>'Secret Answer']); ?>
+
+							<?php endif; ?>
+							<p><h3>Captcha:<?php echo captcha_img(); ?></h3></p>
+							<?php echo Form::text('captcha',null,['placeholder'=>'Captcha Here']); ?>
+
+							<?php echo Form::button('Signup', ['type'=>'submit','class'=>'btn btn-default']); ?>
+
+						<?php echo Form::close(); ?>
+
+					</div>
+					<!--/sign up form-->
+				</div>
+			</div>
+		</div>
+	<?php endif; ?>
+</section><!--/form-->
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('block.master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

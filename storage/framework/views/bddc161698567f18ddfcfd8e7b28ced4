@@ -1,0 +1,64 @@
+<?php $__env->startSection('breadcrumbs'); ?>
+<!--breadcrumbs-->
+<div class="container">
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="breadcrumbs">
+				<ol class="breadcrumb">
+				  <li><a href="#">Home</a></li>
+				  <li><a href="#"><?php echo e($searchType); ?></a></li>
+				  <li><a href="#"><?php echo e($searchName); ?></a></li>
+				</ol>
+			</div>
+		</div>
+	</div>
+</div>
+<!--/breadcrumbs-->
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('contents'); ?>
+<section>
+	<div class="container">
+		<div class="row">
+			<!--recommended_items-->
+			<div class="col-sm-12">
+				<div class="features_items"><!--features_items-->
+					<?php if(count($products)==1): ?>
+					<h2 class="title text-center">Total <?php echo e(count($products)); ?> Result</h2>
+					<?php else: ?>
+					<h2 class="title text-center">Total <?php echo e(count($products)); ?> Results</h2>
+					<?php endif; ?>
+					<!--product_details-->
+					<?php foreach($products as $product): ?>
+					<div class="col-sm-4">
+						<div class="product-image-wrapper">
+							<div class="single-products">
+								<div class="productinfo text-center">
+									<?php if($product['rating'] != null): ?>
+									<p class="newarrival" style="background:#FE980F;font-weight:bold;color:#eee;padding:0px 5px;font-size:16px">
+										<?php for($i=0;$i<(int)$product['rating'];$i++): ?>
+											<span class="fa fa-star"></span>
+										<?php endfor; ?>
+										<?php if( $product['rating'] > (int)$product['rating']): ?>
+											<span class="fa fa-star-o"></span>
+										<?php endif; ?>
+									</p>
+									<?php endif; ?>
+									<a href="<?php echo e(url('product',$product->slug)); ?>"><img src="<?php echo e($product->imgsrc); ?>" alt="" />
+									<h2><?php echo e($product->price); ?></h2>
+									<p><?php echo e((strlen($product->title) > 35) ? substr($product->title,0,32).'...' : $product->title); ?></p>
+									<a href="<?php echo e(url('product',$product->slug)); ?>" class="btn btn-default add-to-cart"><i class="fa fa-search"></i>Show</a>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!--/product_details-->
+					<?php endforeach; ?>
+
+			<!--/recommended_items-->
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('block.master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
